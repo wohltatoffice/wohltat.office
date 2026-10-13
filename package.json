@@ -1,0 +1,9 @@
+{
+  "name": "wohltat-office-booking-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nimmt verbindliche Buchungen von wohltat.office entgegen, legt eine Entwurfsrechnung in Lexware Office (ehem. Lexoffice) an und verschickt Bestätigungs-E-Mails.",
+  "engines": {
+    "node": ">=18"
+  }
+}
