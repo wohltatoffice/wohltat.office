@@ -338,6 +338,7 @@
   .addon-toggle{ display:flex; align-items:center; gap:10px; margin-top:20px; font-size:14.5px; font-weight:500; cursor:pointer; }
   .optin-check{ display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--ink-soft); margin-top:22px; cursor:pointer; line-height:1.45; }
   .optin-check input{ margin-top:3px; accent-color:var(--teal); flex:none; width:16px; height:16px; }
+  .optin-check span{ flex:1; min-width:0; }
   .optin-check a{ color:var(--teal); font-weight:600; }
   .booking-btn-row{ display:flex; flex-direction:column; gap:10px; margin-top:14px; }
   .booking-btn-row .btn{ width:100%; white-space:normal; }
@@ -949,7 +950,7 @@
             <div class="summary-row sum-addon-row" data-for="anfahrt" style="display:none;"><span>Anfahrt (<span class="sum-addon-detail">20 km × 2 × 0,40 €</span>)</span><span class="val sum-addon-value" data-for-value="anfahrt">0,00 €</span></div>
             <div class="summary-row total" data-unit-total="Monat"><span>Gesamt / Monat</span><span class="val sum-total-value" data-unit-total-value="Monat">150,00 €</span></div>
             <input type="text" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <label class="optin-check"><input type="checkbox" class="booking-optin"> Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</label>
+            <label class="optin-check"><input type="checkbox" class="booking-optin"><span>Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</span></label>
             <div class="booking-btn-row">
               <button class="btn btn-primary" type="submit" name="mode" value="verbindlich">Verbindlich bestellen (100% Vorkasse)</button>
               <button class="btn btn-outline" type="submit" name="mode" value="anfrage">Unverbindlich anfragen</button>
@@ -1079,7 +1080,7 @@
             <div class="summary-row sum-addon-row" data-for="mail" style="display:none;"><span>Mail-Management</span><span class="val sum-addon-value" data-for-value="mail">45,00 €</span></div>
             <div class="summary-row total" data-unit-total="Monat"><span>Gesamt / Monat</span><span class="val sum-total-value" data-unit-total-value="Monat">220,00 €</span></div>
             <input type="text" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <label class="optin-check"><input type="checkbox" class="booking-optin"> Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</label>
+            <label class="optin-check"><input type="checkbox" class="booking-optin"><span>Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</span></label>
             <div class="booking-btn-row">
               <button class="btn btn-primary" type="submit" name="mode" value="verbindlich">Verbindlich bestellen (100% Vorkasse)</button>
               <button class="btn btn-outline" type="submit" name="mode" value="anfrage">Unverbindlich anfragen</button>
@@ -1242,7 +1243,7 @@
             <div class="summary-row total" data-unit-total="Monat"><span>Monatlich</span><span class="val sum-total-value" data-unit-total-value="Monat">249,00 €</span></div>
             <div class="summary-row total" data-unit-total="einmalig" style="display:none;"><span>Einmalig (Website)</span><span class="val sum-total-value" data-unit-total-value="einmalig">0,00 €</span></div>
             <input type="text" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <label class="optin-check"><input type="checkbox" class="booking-optin"> Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</label>
+            <label class="optin-check"><input type="checkbox" class="booking-optin"><span>Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</span></label>
             <div class="booking-btn-row">
               <button class="btn btn-primary" type="submit" name="mode" value="verbindlich">Verbindlich bestellen (100% Vorkasse)</button>
               <button class="btn btn-outline" type="submit" name="mode" value="anfrage">Unverbindlich anfragen</button>
@@ -1436,7 +1437,7 @@
             <div class="summary-row total" data-unit-total="Paket"><span>Gesamt (Paket)</span><span class="val sum-total-value" data-unit-total-value="Paket">450,00 €</span></div>
             <div class="summary-row total" data-unit-total="einmalig" style="display:none;"><span>Zzgl. einmalig</span><span class="val sum-total-value" data-unit-total-value="einmalig">0,00 €</span></div>
             <input type="text" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <label class="optin-check"><input type="checkbox" class="booking-optin"> Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</label>
+            <label class="optin-check"><input type="checkbox" class="booking-optin"><span>Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</span></label>
             <div class="booking-btn-row">
               <button class="btn btn-primary" type="submit" name="mode" value="verbindlich">Verbindlich bestellen (100% Vorkasse)</button>
               <button class="btn btn-outline" type="submit" name="mode" value="anfrage">Unverbindlich anfragen</button>
@@ -1581,7 +1582,7 @@
             <div class="summary-row total" data-unit-total="Monat"><span>Monatlich</span><span class="val sum-total-value" data-unit-total-value="Monat">300,00 €</span></div>
             <div class="summary-row total" data-unit-total="einmalig" style="display:none;"><span>Einmalig</span><span class="val sum-total-value" data-unit-total-value="einmalig">0,00 €</span></div>
             <input type="text" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <label class="optin-check"><input type="checkbox" class="booking-optin"> Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</label>
+            <label class="optin-check"><input type="checkbox" class="booking-optin"><span>Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</span></label>
             <div class="booking-btn-row">
               <button class="btn btn-primary" type="submit" name="mode" value="verbindlich">Verbindlich bestellen (100% Vorkasse)</button>
               <button class="btn btn-outline" type="submit" name="mode" value="anfrage">Unverbindlich anfragen</button>
@@ -1710,7 +1711,7 @@
             <div class="summary-row sum-addon-row" data-for="express" style="display:none;"><span>Express-Bearbeitung</span><span class="val sum-addon-value" data-for-value="express">150,00 €</span></div>
             <div class="summary-row total" data-unit-total="einmalig"><span>Gesamt (einmalig)</span><span class="val sum-total-value" data-unit-total-value="einmalig">690,00 €</span></div>
             <input type="text" name="_hp" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <label class="optin-check"><input type="checkbox" class="booking-optin"> Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</label>
+            <label class="optin-check"><input type="checkbox" class="booking-optin"><span>Ich akzeptiere die <a href="#/agb" data-route="agb">AGB</a> und bestelle hiermit verbindlich mit 100&nbsp;% Vorkasse.</span></label>
             <div class="booking-btn-row">
               <button class="btn btn-primary" type="submit" name="mode" value="verbindlich">Verbindlich bestellen (100% Vorkasse)</button>
               <button class="btn btn-outline" type="submit" name="mode" value="anfrage">Unverbindlich anfragen</button>
