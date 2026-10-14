@@ -5,7 +5,7 @@
  * einfach eine E-Mail an Nicole, legt aber KEINE Lexoffice-Rechnung an.
  */
 
-const { sendEmail } = require('../lib/email');
+const { sendEmail, signatureHtml } = require('../lib/email');
 
 function isValidEmail(value) {
   return typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -73,7 +73,8 @@ module.exports = async function handler(req, res) {
       html: `
         <p>Hallo ${name},</p>
         <p>vielen Dank für Ihre Nachricht – ich melde mich so schnell wie möglich persönlich bei Ihnen zurück.</p>
-        <p>Herzliche Grüße<br>Nicole Wohlfahrt – wohltat.office</p>
+        <p>Herzliche Grüße</p>
+        ${signatureHtml()}
       `,
     });
 

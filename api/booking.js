@@ -19,7 +19,7 @@
  */
 
 const { findOrCreateContactId, createDraftInvoice } = require('../lib/lexoffice');
-const { sendEmail } = require('../lib/email');
+const { sendEmail, signatureHtml } = require('../lib/email');
 
 function isValidEmail(value) {
   return typeof value === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -138,7 +138,8 @@ module.exports = async function handler(req, res) {
         ${customer.message ? `<p><strong>Ihre Nachricht:</strong> ${customer.message}</p>` : ''}
         <p>Die Rechnung mit den Zahlungsdetails (Vorkasse) erhalten Sie separat, sobald sie von Nicole Wohlfahrt geprüft und freigegeben wurde.</p>
         <p>Bei Fragen erreichen Sie uns jederzeit unter info@wohltatoffice.de oder per WhatsApp.</p>
-        <p>Herzliche Grüße<br>Nicole Wohlfahrt – wohltat.office</p>
+        <p>Herzliche Grüße</p>
+        ${signatureHtml()}
       `,
     });
 
