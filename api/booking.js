@@ -29,10 +29,22 @@ function eur(value) {
   return (Number(value) || 0).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 }
 
+// Wandelt vom Kunden eingegebenen Text in sicheren HTML-Text um, bevor er in
+// eine E-Mail eingebaut wird (schützt vor eingeschleustem HTML/Links in den
+// Formularfeldern – sowohl in der Mail an Nicole als auch an den Kunden).
+function esc(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function setCors(res) {
-  // Auf die echte Domain einschränken, sobald die Seite unter www.wohltatoffice.de läuft
-  // (siehe README.md, Abschnitt "CORS absichern").
-  const origin = process.env.ALLOWED_ORIGIN || '*';
+  // Standardmäßig auf die echte Domain eingeschränkt. Über die Umgebungsvariable
+  // ALLOWED_ORIGIN in Vercel kann das bei Bedarf überschrieben werden (siehe
+  // README.md, Abschnitt "CORS absichern").
+  const origin = process.env.ALLOWED_ORIGIN || 'https://www.wohltatoffice.de';
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -62,7 +74,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { pageLabel, package: pkg, addons, totals, customer, honeypot } = body || {};
+    const { pageLabel, package: pkg, addons, totals, customer, address, honeypot } = body || {};
 
     // Einfacher Spam-Schutz: verstecktes Feld im Formular, das ein Mensch nie ausfüllt.
     if (honeypot) {
@@ -105,10 +117,19 @@ module.exports = async function handler(req, res) {
       name: customer.name,
       email: customer.email,
       phone: customer.phone,
+      company: customer.firma,
+      address,
     });
+
+    const billingName = customer.firma ? `${customer.firma} (${customer.name})` : customer.name;
 
     const invoice = await createDraftInvoice({
       contactId,
+      billingName,
+      street: address && address.street,
+      zip: address && address.zip,
+      city: address && address.city,
+      countryCode: (address && address.country) || 'DE',
       lineItems,
       introduction: `Vielen Dank für Ihre Buchung bei wohltat.office – Leistungsbereich: ${pageLabel || pkg.name}.`,
       remark: 'Zahlung per Vorkasse. Diese Rechnung ist ein interner Entwurf und wird erst nach Prüfung durch wohltat.office final verschickt.',
@@ -117,25 +138,25 @@ module.exports = async function handler(req, res) {
     // --- Bestellbestätigung an den Kunden (OHNE Rechnungsdokument) ---
     const addonLines = (addons || [])
       .filter((a) => a && a.name && Number(a.price) > 0)
-      .map((a) => `<li>${a.name}: ${eur(a.price)}${a.unit ? ' / ' + a.unit : ''}</li>`)
+      .map((a) => `<li>${esc(a.name)}: ${eur(a.price)}${a.unit ? ' / ' + esc(a.unit) : ''}</li>`)
       .join('');
 
     const totalsLines = Object.keys(totals || {})
-      .map((unit) => `<li><strong>${unit === 'einmalig' ? 'Einmalig' : unit}:</strong> ${eur(totals[unit])}</li>`)
+      .map((unit) => `<li><strong>${unit === 'einmalig' ? 'Einmalig' : esc(unit)}:</strong> ${eur(totals[unit])}</li>`)
       .join('');
 
     await sendEmail({
       to: customer.email,
       subject: 'Ihre Bestellbestätigung – wohltat.office',
       html: `
-        <p>Hallo ${customer.name},</p>
+        <p>Hallo ${esc(customer.name)},</p>
         <p>vielen Dank für Ihre verbindliche Buchung bei wohltat.office. Hier eine Zusammenfassung:</p>
         <ul>
-          <li><strong>${pkg.name}</strong>${pkg.unit ? ' (' + pkg.unit + ')' : ''}: ${eur(pkg.price)}</li>
+          <li><strong>${esc(pkg.name)}</strong>${pkg.unit ? ' (' + esc(pkg.unit) + ')' : ''}: ${eur(pkg.price)}</li>
           ${addonLines}
         </ul>
         <ul>${totalsLines}</ul>
-        ${customer.message ? `<p><strong>Ihre Nachricht:</strong> ${customer.message}</p>` : ''}
+        ${customer.message ? `<p><strong>Ihre Nachricht:</strong> ${esc(customer.message).replace(/\n/g, '<br>')}</p>` : ''}
         <p>Die Rechnung mit den Zahlungsdetails (Vorkasse) erhalten Sie separat, sobald sie von Nicole Wohlfahrt geprüft und freigegeben wurde.</p>
         <p>Bei Fragen erreichen Sie uns jederzeit unter info@wohltatoffice.de oder per WhatsApp.</p>
         <p>Herzliche Grüße</p>
@@ -146,19 +167,19 @@ module.exports = async function handler(req, res) {
     // --- Interne Benachrichtigung an Nicole ---
     await sendEmail({
       to: process.env.NOTIFY_EMAIL || 'info@wohltatoffice.de',
-      subject: `Neue verbindliche Buchung: ${pkg.name} (${customer.name})`,
+      subject: `Neue verbindliche Buchung: ${esc(pkg.name)} (${esc(customer.name)})`,
       replyTo: customer.email,
       html: `
         <p>Neue Buchung über die Website:</p>
         <ul>
-          <li><strong>Bereich:</strong> ${pageLabel || '–'}</li>
-          <li><strong>Paket:</strong> ${pkg.name} – ${eur(pkg.price)}${pkg.unit ? ' / ' + pkg.unit : ''}</li>
+          <li><strong>Bereich:</strong> ${esc(pageLabel) || '–'}</li>
+          <li><strong>Paket:</strong> ${esc(pkg.name)} – ${eur(pkg.price)}${pkg.unit ? ' / ' + esc(pkg.unit) : ''}</li>
           ${addonLines}
         </ul>
         <ul>${totalsLines}</ul>
-        <p><strong>Kunde:</strong> ${customer.name} · ${customer.email}${customer.phone ? ' · ' + customer.phone : ''}</p>
-        ${customer.message ? `<p><strong>Nachricht:</strong> ${customer.message}</p>` : ''}
-        <p><strong>Lexoffice-Entwurfsrechnung angelegt</strong> (Rechnungs-ID: ${invoice.id}). Die Rechnung liegt als Entwurf vor und wurde noch NICHT an den Kunden verschickt. Bitte in Lexoffice unter „Rechnungen → Entwürfe“ prüfen, ggf. anpassen und freigeben.</p>
+        <p><strong>Kunde:</strong> ${esc(customer.name)} · ${esc(customer.email)}${customer.phone ? ' · ' + esc(customer.phone) : ''}</p>
+        ${customer.message ? `<p><strong>Nachricht:</strong> ${esc(customer.message).replace(/\n/g, '<br>')}</p>` : ''}
+        <p><strong>Lexoffice-Entwurfsrechnung angelegt</strong> (Rechnungs-ID: ${esc(invoice.id)}). Die Rechnung liegt als Entwurf vor und wurde noch NICHT an den Kunden verschickt. Bitte in Lexoffice unter „Rechnungen → Entwürfe“ prüfen, ggf. anpassen und freigeben.</p>
       `,
     });
 
