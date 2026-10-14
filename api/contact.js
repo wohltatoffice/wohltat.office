@@ -67,12 +67,20 @@ module.exports = async function handler(req, res) {
       `,
     });
 
+    const summaryBlock = (message || '').trim()
+      ? `
+        <p><strong>Zusammenfassung Ihrer Anfrage:</strong></p>
+        <p style="background:#f6f3ea; border-radius:8px; padding:14px 16px;">${(message || '').replace(/</g, '&lt;').replace(/\n/g, '<br>')}</p>
+      `
+      : '';
+
     await sendEmail({
       to: email,
       subject: 'Ihre Anfrage bei wohltat.office',
       html: `
         <p>Hallo ${name},</p>
         <p>vielen Dank für Ihre Nachricht – ich melde mich so schnell wie möglich persönlich bei Ihnen zurück.</p>
+        ${summaryBlock}
         <p>Herzliche Grüße</p>
         ${signatureHtml()}
       `,
